@@ -1,0 +1,1576 @@
+{
+  "commit": "e821ddccdef5dd24c2663c163e0b62d15b0646a5",
+  "node": "v22.23.4",
+  "levels": {
+    "browserModule": "in-process createOwnAnimation，加载器由探针挂起",
+    "desktopModule": "in-process 执行 runtime/electron-helper/sprite/playback.js",
+    "hostComposition": "同一进程里把回执送进真实 PlaybackStore；没有 HTTP",
+    "stateDelivery": "真实 PollStateStore + takeChanged；没有长轮询连接",
+    "liveProcess": "未跑"
+  },
+  "browserModule": {
+    "success": {
+      "release": "success",
+      "withHost": false,
+      "marks": [
+        {
+          "seq": 1,
+          "tMs": 0.478415,
+          "event": "switch-first",
+          "detail": {
+            "id": "pb-1"
+          }
+        },
+        {
+          "seq": 2,
+          "tMs": 0.62519,
+          "event": "clear-cue-playback"
+        },
+        {
+          "seq": 3,
+          "tMs": 1.030706,
+          "event": "after-first-switch",
+          "detail": {
+            "loadRequests": 1,
+            "playCalls": 0,
+            "src": "",
+            "playingField": null
+          }
+        },
+        {
+          "seq": 4,
+          "tMs": 1.034223,
+          "event": "switch-second",
+          "detail": {
+            "id": "pb-2"
+          }
+        },
+        {
+          "seq": 5,
+          "tMs": 1.036329,
+          "event": "clear-cue-playback"
+        },
+        {
+          "seq": 6,
+          "tMs": 1.068591,
+          "event": "report",
+          "detail": {
+            "id": "pb-2",
+            "status": "playing",
+            "reason": null,
+            "hostOutcome": null,
+            "hostStatus": null,
+            "playCalls": 0,
+            "src": ""
+          }
+        },
+        {
+          "seq": 7,
+          "tMs": 1.072603,
+          "event": "after-second-switch",
+          "detail": {
+            "loadRequests": 1,
+            "playCalls": 0,
+            "src": "",
+            "playingField": "pb-2"
+          }
+        },
+        {
+          "seq": 8,
+          "tMs": 1.114409,
+          "event": "object-url",
+          "detail": {
+            "src": "blob:held",
+            "playCalls": 0
+          }
+        },
+        {
+          "seq": 9,
+          "tMs": 1.22892,
+          "event": "report",
+          "detail": {
+            "id": "pb-2",
+            "status": "cancelled",
+            "reason": "superseded",
+            "hostOutcome": null,
+            "hostStatus": null,
+            "playCalls": 0,
+            "src": "blob:held"
+          }
+        },
+        {
+          "seq": 10,
+          "tMs": 1.25946,
+          "event": "front-ready"
+        },
+        {
+          "seq": 11,
+          "tMs": 1.267673,
+          "event": "loadeddata-returned",
+          "detail": {
+            "playCalls": 1,
+            "playingField": "pb-1"
+          }
+        },
+        {
+          "seq": 12,
+          "tMs": 1.282645,
+          "event": "report",
+          "detail": {
+            "id": "pb-1",
+            "status": "playing",
+            "reason": null,
+            "hostOutcome": null,
+            "hostStatus": null,
+            "playCalls": 1,
+            "src": "blob:held"
+          }
+        },
+        {
+          "seq": 13,
+          "tMs": 1.285208,
+          "event": "after-play-microtasks",
+          "detail": {
+            "playCalls": 1,
+            "playingField": "pb-1"
+          }
+        },
+        {
+          "seq": 14,
+          "tMs": 1.335776,
+          "event": "report",
+          "detail": {
+            "id": "pb-1",
+            "status": "ended",
+            "reason": null,
+            "hostOutcome": null,
+            "hostStatus": null,
+            "playCalls": 1,
+            "src": "blob:held"
+          }
+        },
+        {
+          "seq": 15,
+          "tMs": 1.417153,
+          "event": "after-handle-ended",
+          "detail": {
+            "playingField": null
+          }
+        }
+      ],
+      "reports": [
+        {
+          "id": "pb-2",
+          "status": "playing"
+        },
+        {
+          "id": "pb-2",
+          "status": "cancelled",
+          "reason": "superseded"
+        },
+        {
+          "id": "pb-1",
+          "status": "playing"
+        },
+        {
+          "id": "pb-1",
+          "status": "ended"
+        }
+      ],
+      "terminalWait": null,
+      "playingWaitImmediate": null,
+      "records": null
+    },
+    "failure": {
+      "release": "failure",
+      "withHost": false,
+      "marks": [
+        {
+          "seq": 1,
+          "tMs": 1.473803,
+          "event": "switch-first",
+          "detail": {
+            "id": "pb-1"
+          }
+        },
+        {
+          "seq": 2,
+          "tMs": 1.475233,
+          "event": "clear-cue-playback"
+        },
+        {
+          "seq": 3,
+          "tMs": 1.492173,
+          "event": "after-first-switch",
+          "detail": {
+            "loadRequests": 1,
+            "playCalls": 0,
+            "src": "",
+            "playingField": null
+          }
+        },
+        {
+          "seq": 4,
+          "tMs": 1.493337,
+          "event": "switch-second",
+          "detail": {
+            "id": "pb-2"
+          }
+        },
+        {
+          "seq": 5,
+          "tMs": 1.494046,
+          "event": "clear-cue-playback"
+        },
+        {
+          "seq": 6,
+          "tMs": 1.500979,
+          "event": "report",
+          "detail": {
+            "id": "pb-2",
+            "status": "playing",
+            "reason": null,
+            "hostOutcome": null,
+            "hostStatus": null,
+            "playCalls": 0,
+            "src": ""
+          }
+        },
+        {
+          "seq": 7,
+          "tMs": 1.503528,
+          "event": "after-second-switch",
+          "detail": {
+            "loadRequests": 1,
+            "playCalls": 0,
+            "src": "",
+            "playingField": "pb-2"
+          }
+        },
+        {
+          "seq": 8,
+          "tMs": 1.55641,
+          "event": "report",
+          "detail": {
+            "id": "pb-1",
+            "status": "failed",
+            "reason": "asset-load",
+            "hostOutcome": null,
+            "hostStatus": null,
+            "playCalls": 0,
+            "src": ""
+          }
+        },
+        {
+          "seq": 9,
+          "tMs": 2.051386,
+          "event": "load-error-returned",
+          "detail": {
+            "loadRequests": 1,
+            "playCalls": 0,
+            "playingField": "pb-2"
+          }
+        }
+      ],
+      "reports": [
+        {
+          "id": "pb-2",
+          "status": "playing"
+        },
+        {
+          "id": "pb-1",
+          "status": "failed",
+          "reason": "asset-load"
+        }
+      ],
+      "terminalWait": null,
+      "playingWaitImmediate": null,
+      "records": null
+    },
+    "playReject": {
+      "release": "play-reject",
+      "withHost": false,
+      "marks": [
+        {
+          "seq": 1,
+          "tMs": 2.072607,
+          "event": "switch-first",
+          "detail": {
+            "id": "pb-1"
+          }
+        },
+        {
+          "seq": 2,
+          "tMs": 2.073778,
+          "event": "clear-cue-playback"
+        },
+        {
+          "seq": 3,
+          "tMs": 2.08785,
+          "event": "after-first-switch",
+          "detail": {
+            "loadRequests": 1,
+            "playCalls": 0,
+            "src": "",
+            "playingField": null
+          }
+        },
+        {
+          "seq": 4,
+          "tMs": 2.088536,
+          "event": "switch-second",
+          "detail": {
+            "id": "pb-2"
+          }
+        },
+        {
+          "seq": 5,
+          "tMs": 2.089028,
+          "event": "clear-cue-playback"
+        },
+        {
+          "seq": 6,
+          "tMs": 2.093182,
+          "event": "report",
+          "detail": {
+            "id": "pb-2",
+            "status": "playing",
+            "reason": null,
+            "hostOutcome": null,
+            "hostStatus": null,
+            "playCalls": 0,
+            "src": ""
+          }
+        },
+        {
+          "seq": 7,
+          "tMs": 2.094587,
+          "event": "after-second-switch",
+          "detail": {
+            "loadRequests": 1,
+            "playCalls": 0,
+            "src": "",
+            "playingField": "pb-2"
+          }
+        },
+        {
+          "seq": 8,
+          "tMs": 2.097864,
+          "event": "object-url",
+          "detail": {
+            "src": "blob:held",
+            "playCalls": 0
+          }
+        },
+        {
+          "seq": 9,
+          "tMs": 2.105694,
+          "event": "report",
+          "detail": {
+            "id": "pb-2",
+            "status": "cancelled",
+            "reason": "superseded",
+            "hostOutcome": null,
+            "hostStatus": null,
+            "playCalls": 0,
+            "src": "blob:held"
+          }
+        },
+        {
+          "seq": 10,
+          "tMs": 2.131284,
+          "event": "front-ready"
+        },
+        {
+          "seq": 11,
+          "tMs": 2.133053,
+          "event": "loadeddata-returned",
+          "detail": {
+            "playCalls": 1,
+            "playingField": "pb-1"
+          }
+        },
+        {
+          "seq": 12,
+          "tMs": 2.15009,
+          "event": "report",
+          "detail": {
+            "id": "pb-1",
+            "status": "failed",
+            "reason": "play-rejected",
+            "hostOutcome": null,
+            "hostStatus": null,
+            "playCalls": 1,
+            "src": "blob:held"
+          }
+        },
+        {
+          "seq": 13,
+          "tMs": 2.152556,
+          "event": "after-play-microtasks",
+          "detail": {
+            "playCalls": 1,
+            "playingField": null
+          }
+        }
+      ],
+      "reports": [
+        {
+          "id": "pb-2",
+          "status": "playing"
+        },
+        {
+          "id": "pb-2",
+          "status": "cancelled",
+          "reason": "superseded"
+        },
+        {
+          "id": "pb-1",
+          "status": "failed",
+          "reason": "play-rejected"
+        }
+      ],
+      "terminalWait": null,
+      "playingWaitImmediate": null,
+      "records": null
+    },
+    "nullSecondDoesNotReport": {
+      "marks": [
+        {
+          "seq": 1,
+          "tMs": 2.192692,
+          "event": "clear-cue-playback"
+        },
+        {
+          "seq": 2,
+          "tMs": 2.204926,
+          "event": "switch-null"
+        },
+        {
+          "seq": 3,
+          "tMs": 2.210198,
+          "event": "after-null",
+          "detail": {
+            "loadRequests": 1,
+            "reports": 0,
+            "playCalls": 0
+          }
+        }
+      ],
+      "reports": []
+    },
+    "summary": {
+      "success": {
+        "prematurePlayingBeforePlay": true,
+        "secondTerminalCount": 1,
+        "secondStatuses": [
+          "playing",
+          "cancelled"
+        ]
+      },
+      "failure": {
+        "prematurePlayingBeforePlay": true,
+        "secondTerminalCount": 0,
+        "secondStatuses": [
+          "playing"
+        ]
+      }
+    }
+  },
+  "desktopModule": {
+    "success": {
+      "release": "success",
+      "withHost": false,
+      "marks": [
+        {
+          "seq": 1,
+          "tMs": 6.733023,
+          "event": "switch-first",
+          "detail": {
+            "id": "pb-1"
+          }
+        },
+        {
+          "seq": 2,
+          "tMs": 6.870107,
+          "event": "after-first-switch",
+          "detail": {
+            "src": "/dsh-pet-7340/thumb/duck/idle1.webm",
+            "playCalls": 0,
+            "loadCalls": 1,
+            "pending": "idle1"
+          }
+        },
+        {
+          "seq": 3,
+          "tMs": 6.87137,
+          "event": "switch-second",
+          "detail": {
+            "id": "pb-2"
+          }
+        },
+        {
+          "seq": 4,
+          "tMs": 6.900038,
+          "event": "report",
+          "detail": {
+            "id": "pb-2",
+            "status": "playing",
+            "reason": null,
+            "hostOutcome": null,
+            "hostStatus": null,
+            "playCalls": 0,
+            "src": "/dsh-pet-7340/thumb/duck/idle1.webm",
+            "playbackField": "pb-2"
+          }
+        },
+        {
+          "seq": 5,
+          "tMs": 6.902559,
+          "event": "after-second-switch",
+          "detail": {
+            "src": "/dsh-pet-7340/thumb/duck/idle1.webm",
+            "playCalls": 0,
+            "loadCalls": 1,
+            "playbackField": "pb-2"
+          }
+        },
+        {
+          "seq": 6,
+          "tMs": 6.954066,
+          "event": "report",
+          "detail": {
+            "id": "pb-2",
+            "status": "cancelled",
+            "reason": "superseded",
+            "hostOutcome": null,
+            "hostStatus": null,
+            "playCalls": 0,
+            "src": "/dsh-pet-7340/thumb/duck/idle1.webm",
+            "playbackField": "pb-2"
+          }
+        },
+        {
+          "seq": 7,
+          "tMs": 6.959849,
+          "event": "loadeddata-returned",
+          "detail": {
+            "playCalls": 1,
+            "playbackField": "pb-1"
+          }
+        },
+        {
+          "seq": 8,
+          "tMs": 6.969039,
+          "event": "report",
+          "detail": {
+            "id": "pb-1",
+            "status": "playing",
+            "reason": null,
+            "hostOutcome": null,
+            "hostStatus": null,
+            "playCalls": 1,
+            "src": "/dsh-pet-7340/thumb/duck/idle1.webm",
+            "playbackField": "pb-1"
+          }
+        },
+        {
+          "seq": 9,
+          "tMs": 6.971041,
+          "event": "after-play-microtasks",
+          "detail": {
+            "playCalls": 1,
+            "playbackField": "pb-1"
+          }
+        },
+        {
+          "seq": 10,
+          "tMs": 7.025171,
+          "event": "report",
+          "detail": {
+            "id": "pb-1",
+            "status": "ended",
+            "reason": null,
+            "hostOutcome": null,
+            "hostStatus": null,
+            "playCalls": 1,
+            "src": "/dsh-pet-7340/thumb/duck/idle1.webm",
+            "playbackField": null
+          }
+        },
+        {
+          "seq": 11,
+          "tMs": 7.026763,
+          "event": "after-handle-ended",
+          "detail": {
+            "playbackField": null
+          }
+        }
+      ],
+      "reports": [
+        {
+          "id": "pb-2",
+          "status": "playing"
+        },
+        {
+          "id": "pb-2",
+          "status": "cancelled",
+          "reason": "superseded"
+        },
+        {
+          "id": "pb-1",
+          "status": "playing"
+        },
+        {
+          "id": "pb-1",
+          "status": "ended"
+        }
+      ],
+      "terminalWait": null,
+      "records": null
+    },
+    "failure": {
+      "release": "failure",
+      "withHost": false,
+      "marks": [
+        {
+          "seq": 1,
+          "tMs": 7.040296,
+          "event": "switch-first",
+          "detail": {
+            "id": "pb-1"
+          }
+        },
+        {
+          "seq": 2,
+          "tMs": 7.054035,
+          "event": "after-first-switch",
+          "detail": {
+            "src": "/dsh-pet-7340/thumb/duck/idle1.webm",
+            "playCalls": 0,
+            "loadCalls": 1,
+            "pending": "idle1"
+          }
+        },
+        {
+          "seq": 3,
+          "tMs": 7.054596,
+          "event": "switch-second",
+          "detail": {
+            "id": "pb-2"
+          }
+        },
+        {
+          "seq": 4,
+          "tMs": 7.05835,
+          "event": "report",
+          "detail": {
+            "id": "pb-2",
+            "status": "playing",
+            "reason": null,
+            "hostOutcome": null,
+            "hostStatus": null,
+            "playCalls": 0,
+            "src": "/dsh-pet-7340/thumb/duck/idle1.webm",
+            "playbackField": "pb-2"
+          }
+        },
+        {
+          "seq": 5,
+          "tMs": 7.059691,
+          "event": "after-second-switch",
+          "detail": {
+            "src": "/dsh-pet-7340/thumb/duck/idle1.webm",
+            "playCalls": 0,
+            "loadCalls": 1,
+            "playbackField": "pb-2"
+          }
+        },
+        {
+          "seq": 6,
+          "tMs": 7.136211,
+          "event": "report",
+          "detail": {
+            "id": "pb-1",
+            "status": "failed",
+            "reason": "decode-error",
+            "hostOutcome": null,
+            "hostStatus": null,
+            "playCalls": 0,
+            "src": "/dsh-pet-7340/thumb/duck/idle1.webm",
+            "playbackField": "pb-2"
+          }
+        },
+        {
+          "seq": 7,
+          "tMs": 7.137569,
+          "event": "video-error-returned",
+          "detail": {
+            "playCalls": 0,
+            "playbackField": "pb-2"
+          }
+        }
+      ],
+      "reports": [
+        {
+          "id": "pb-2",
+          "status": "playing"
+        },
+        {
+          "id": "pb-1",
+          "status": "failed",
+          "reason": "decode-error"
+        }
+      ],
+      "terminalWait": null,
+      "records": null
+    },
+    "summary": {
+      "success": {
+        "prematurePlayingBeforePlay": true,
+        "secondTerminalCount": 1,
+        "secondStatuses": [
+          "playing",
+          "cancelled"
+        ]
+      },
+      "failure": {
+        "prematurePlayingBeforePlay": true,
+        "secondTerminalCount": 0,
+        "secondStatuses": [
+          "playing"
+        ]
+      }
+    }
+  },
+  "hostComposition": {
+    "browserSuccess": {
+      "release": "success",
+      "withHost": true,
+      "marks": [
+        {
+          "seq": 1,
+          "tMs": 2.420667,
+          "event": "host-create",
+          "detail": {
+            "id": "pb-mvtd5i4j-1",
+            "status": "accepted"
+          }
+        },
+        {
+          "seq": 2,
+          "tMs": 2.423025,
+          "event": "switch-first",
+          "detail": {
+            "id": "pb-mvtd5i4j-1"
+          }
+        },
+        {
+          "seq": 3,
+          "tMs": 2.424207,
+          "event": "clear-cue-playback"
+        },
+        {
+          "seq": 4,
+          "tMs": 2.44279,
+          "event": "after-first-switch",
+          "detail": {
+            "loadRequests": 1,
+            "playCalls": 0,
+            "src": "",
+            "playingField": null
+          }
+        },
+        {
+          "seq": 5,
+          "tMs": 2.554359,
+          "event": "host-create-second",
+          "detail": {
+            "id": "pb-mvtd5i4j-2",
+            "first": {
+              "playbackId": "pb-mvtd5i4j-1",
+              "status": "cancelled",
+              "reason": "superseded"
+            },
+            "second": {
+              "playbackId": "pb-mvtd5i4j-2",
+              "status": "accepted",
+              "reason": null
+            }
+          }
+        },
+        {
+          "seq": 6,
+          "tMs": 2.555715,
+          "event": "switch-second",
+          "detail": {
+            "id": "pb-mvtd5i4j-2"
+          }
+        },
+        {
+          "seq": 7,
+          "tMs": 2.55686,
+          "event": "clear-cue-playback"
+        },
+        {
+          "seq": 8,
+          "tMs": 2.67508,
+          "event": "report",
+          "detail": {
+            "id": "pb-mvtd5i4j-2",
+            "status": "playing",
+            "reason": null,
+            "hostOutcome": "ok",
+            "hostStatus": "playing",
+            "playCalls": 0,
+            "src": ""
+          }
+        },
+        {
+          "seq": 9,
+          "tMs": 2.678019,
+          "event": "after-second-switch",
+          "detail": {
+            "loadRequests": 1,
+            "playCalls": 0,
+            "src": "",
+            "playingField": "pb-mvtd5i4j-2"
+          }
+        },
+        {
+          "seq": 10,
+          "tMs": 2.696432,
+          "event": "host-create-third-while-second-playing",
+          "detail": {
+            "third": {
+              "playbackId": "pb-mvtd5i4k-3",
+              "status": "accepted",
+              "reason": null
+            },
+            "second": {
+              "playbackId": "pb-mvtd5i4j-2",
+              "status": "playing",
+              "reason": null
+            },
+            "first": {
+              "playbackId": "pb-mvtd5i4j-1",
+              "status": "cancelled",
+              "reason": "superseded"
+            }
+          }
+        },
+        {
+          "seq": 11,
+          "tMs": 2.701682,
+          "event": "object-url",
+          "detail": {
+            "src": "blob:held",
+            "playCalls": 0
+          }
+        },
+        {
+          "seq": 12,
+          "tMs": 2.718903,
+          "event": "report",
+          "detail": {
+            "id": "pb-mvtd5i4j-2",
+            "status": "cancelled",
+            "reason": "superseded",
+            "hostOutcome": "ok",
+            "hostStatus": "cancelled",
+            "playCalls": 0,
+            "src": "blob:held"
+          }
+        },
+        {
+          "seq": 13,
+          "tMs": 2.721982,
+          "event": "front-ready"
+        },
+        {
+          "seq": 14,
+          "tMs": 2.724376,
+          "event": "loadeddata-returned",
+          "detail": {
+            "playCalls": 1,
+            "playingField": "pb-mvtd5i4j-1"
+          }
+        },
+        {
+          "seq": 15,
+          "tMs": 2.729166,
+          "event": "report",
+          "detail": {
+            "id": "pb-mvtd5i4j-1",
+            "status": "playing",
+            "reason": null,
+            "hostOutcome": "ignored",
+            "hostStatus": "cancelled",
+            "playCalls": 1,
+            "src": "blob:held"
+          }
+        },
+        {
+          "seq": 16,
+          "tMs": 2.7318,
+          "event": "after-play-microtasks",
+          "detail": {
+            "playCalls": 1,
+            "playingField": "pb-mvtd5i4j-1"
+          }
+        },
+        {
+          "seq": 17,
+          "tMs": 2.736552,
+          "event": "report",
+          "detail": {
+            "id": "pb-mvtd5i4j-1",
+            "status": "ended",
+            "reason": null,
+            "hostOutcome": "ignored",
+            "hostStatus": "cancelled",
+            "playCalls": 1,
+            "src": "blob:held"
+          }
+        },
+        {
+          "seq": 18,
+          "tMs": 2.744141,
+          "event": "after-handle-ended",
+          "detail": {
+            "playingField": null
+          }
+        }
+      ],
+      "reports": [
+        {
+          "id": "pb-mvtd5i4j-2",
+          "status": "playing",
+          "hostOutcome": "ok"
+        },
+        {
+          "id": "pb-mvtd5i4j-2",
+          "status": "cancelled",
+          "reason": "superseded",
+          "hostOutcome": "ok"
+        },
+        {
+          "id": "pb-mvtd5i4j-1",
+          "status": "playing",
+          "hostOutcome": "ignored"
+        },
+        {
+          "id": "pb-mvtd5i4j-1",
+          "status": "ended",
+          "hostOutcome": "ignored"
+        }
+      ],
+      "terminalWait": {
+        "playbackId": "pb-mvtd5i4j-2",
+        "status": "cancelled",
+        "reason": "superseded",
+        "matched": false
+      },
+      "playingWaitImmediate": {
+        "playbackId": "pb-mvtd5i4j-2",
+        "status": "cancelled",
+        "wouldMatchImmediately": false
+      },
+      "records": {
+        "first": {
+          "playbackId": "pb-mvtd5i4j-1",
+          "status": "cancelled",
+          "reason": "superseded"
+        },
+        "second": {
+          "playbackId": "pb-mvtd5i4j-2",
+          "status": "cancelled",
+          "reason": "superseded"
+        },
+        "third": {
+          "playbackId": "pb-mvtd5i4k-3",
+          "status": "accepted",
+          "reason": null
+        }
+      }
+    },
+    "browserFailure": {
+      "release": "failure",
+      "withHost": true,
+      "marks": [
+        {
+          "seq": 1,
+          "tMs": 4.326234,
+          "event": "host-create",
+          "detail": {
+            "id": "pb-mvtd5i4l-1",
+            "status": "accepted"
+          }
+        },
+        {
+          "seq": 2,
+          "tMs": 4.327812,
+          "event": "switch-first",
+          "detail": {
+            "id": "pb-mvtd5i4l-1"
+          }
+        },
+        {
+          "seq": 3,
+          "tMs": 4.328827,
+          "event": "clear-cue-playback"
+        },
+        {
+          "seq": 4,
+          "tMs": 4.34433,
+          "event": "after-first-switch",
+          "detail": {
+            "loadRequests": 1,
+            "playCalls": 0,
+            "src": "",
+            "playingField": null
+          }
+        },
+        {
+          "seq": 5,
+          "tMs": 4.356919,
+          "event": "host-create-second",
+          "detail": {
+            "id": "pb-mvtd5i4l-2",
+            "first": {
+              "playbackId": "pb-mvtd5i4l-1",
+              "status": "cancelled",
+              "reason": "superseded"
+            },
+            "second": {
+              "playbackId": "pb-mvtd5i4l-2",
+              "status": "accepted",
+              "reason": null
+            }
+          }
+        },
+        {
+          "seq": 6,
+          "tMs": 4.35751,
+          "event": "switch-second",
+          "detail": {
+            "id": "pb-mvtd5i4l-2"
+          }
+        },
+        {
+          "seq": 7,
+          "tMs": 4.35807,
+          "event": "clear-cue-playback"
+        },
+        {
+          "seq": 8,
+          "tMs": 4.363725,
+          "event": "report",
+          "detail": {
+            "id": "pb-mvtd5i4l-2",
+            "status": "playing",
+            "reason": null,
+            "hostOutcome": "ok",
+            "hostStatus": "playing",
+            "playCalls": 0,
+            "src": ""
+          }
+        },
+        {
+          "seq": 9,
+          "tMs": 4.365344,
+          "event": "after-second-switch",
+          "detail": {
+            "loadRequests": 1,
+            "playCalls": 0,
+            "src": "",
+            "playingField": "pb-mvtd5i4l-2"
+          }
+        },
+        {
+          "seq": 10,
+          "tMs": 4.374421,
+          "event": "host-create-third-while-second-playing",
+          "detail": {
+            "third": {
+              "playbackId": "pb-mvtd5i4l-3",
+              "status": "accepted",
+              "reason": null
+            },
+            "second": {
+              "playbackId": "pb-mvtd5i4l-2",
+              "status": "playing",
+              "reason": null
+            },
+            "first": {
+              "playbackId": "pb-mvtd5i4l-1",
+              "status": "cancelled",
+              "reason": "superseded"
+            }
+          }
+        },
+        {
+          "seq": 11,
+          "tMs": 4.384977,
+          "event": "report",
+          "detail": {
+            "id": "pb-mvtd5i4l-1",
+            "status": "failed",
+            "reason": "asset-load",
+            "hostOutcome": "ignored",
+            "hostStatus": "cancelled",
+            "playCalls": 0,
+            "src": ""
+          }
+        },
+        {
+          "seq": 12,
+          "tMs": 4.433728,
+          "event": "load-error-returned",
+          "detail": {
+            "loadRequests": 1,
+            "playCalls": 0,
+            "playingField": "pb-mvtd5i4l-2"
+          }
+        }
+      ],
+      "reports": [
+        {
+          "id": "pb-mvtd5i4l-2",
+          "status": "playing",
+          "hostOutcome": "ok"
+        },
+        {
+          "id": "pb-mvtd5i4l-1",
+          "status": "failed",
+          "reason": "asset-load",
+          "hostOutcome": "ignored"
+        }
+      ],
+      "terminalWait": {
+        "playbackId": "pb-mvtd5i4l-2",
+        "status": "playing",
+        "reason": null,
+        "matched": false
+      },
+      "playingWaitImmediate": {
+        "playbackId": "pb-mvtd5i4l-2",
+        "status": "playing",
+        "wouldMatchImmediately": true
+      },
+      "records": {
+        "first": {
+          "playbackId": "pb-mvtd5i4l-1",
+          "status": "cancelled",
+          "reason": "superseded"
+        },
+        "second": {
+          "playbackId": "pb-mvtd5i4l-2",
+          "status": "playing",
+          "reason": null
+        },
+        "third": {
+          "playbackId": "pb-mvtd5i4l-3",
+          "status": "accepted",
+          "reason": null
+        }
+      }
+    },
+    "desktopSuccess": {
+      "release": "success",
+      "withHost": true,
+      "marks": [
+        {
+          "seq": 1,
+          "tMs": 7.155856,
+          "event": "host-create",
+          "detail": {
+            "id": "pb-mvtd5i4o-1",
+            "status": "accepted"
+          }
+        },
+        {
+          "seq": 2,
+          "tMs": 7.156489,
+          "event": "switch-first",
+          "detail": {
+            "id": "pb-mvtd5i4o-1"
+          }
+        },
+        {
+          "seq": 3,
+          "tMs": 7.167936,
+          "event": "after-first-switch",
+          "detail": {
+            "src": "/dsh-pet-7340/thumb/duck/idle1.webm",
+            "playCalls": 0,
+            "loadCalls": 1,
+            "pending": "idle1"
+          }
+        },
+        {
+          "seq": 4,
+          "tMs": 7.17837,
+          "event": "host-create-second",
+          "detail": {
+            "id": "pb-mvtd5i4o-2",
+            "first": {
+              "playbackId": "pb-mvtd5i4o-1",
+              "status": "cancelled",
+              "reason": "superseded"
+            },
+            "second": {
+              "playbackId": "pb-mvtd5i4o-2",
+              "status": "accepted",
+              "reason": null
+            }
+          }
+        },
+        {
+          "seq": 5,
+          "tMs": 7.178885,
+          "event": "switch-second",
+          "detail": {
+            "id": "pb-mvtd5i4o-2"
+          }
+        },
+        {
+          "seq": 6,
+          "tMs": 7.185615,
+          "event": "report",
+          "detail": {
+            "id": "pb-mvtd5i4o-2",
+            "status": "playing",
+            "reason": null,
+            "hostOutcome": "ok",
+            "hostStatus": "playing",
+            "playCalls": 0,
+            "src": "/dsh-pet-7340/thumb/duck/idle1.webm",
+            "playbackField": "pb-mvtd5i4o-2"
+          }
+        },
+        {
+          "seq": 7,
+          "tMs": 7.186912,
+          "event": "after-second-switch",
+          "detail": {
+            "src": "/dsh-pet-7340/thumb/duck/idle1.webm",
+            "playCalls": 0,
+            "loadCalls": 1,
+            "playbackField": "pb-mvtd5i4o-2"
+          }
+        },
+        {
+          "seq": 8,
+          "tMs": 7.197133,
+          "event": "report",
+          "detail": {
+            "id": "pb-mvtd5i4o-2",
+            "status": "cancelled",
+            "reason": "superseded",
+            "hostOutcome": "ok",
+            "hostStatus": "cancelled",
+            "playCalls": 0,
+            "src": "/dsh-pet-7340/thumb/duck/idle1.webm",
+            "playbackField": "pb-mvtd5i4o-2"
+          }
+        },
+        {
+          "seq": 9,
+          "tMs": 7.19999,
+          "event": "loadeddata-returned",
+          "detail": {
+            "playCalls": 1,
+            "playbackField": "pb-mvtd5i4o-1"
+          }
+        },
+        {
+          "seq": 10,
+          "tMs": 7.204907,
+          "event": "report",
+          "detail": {
+            "id": "pb-mvtd5i4o-1",
+            "status": "playing",
+            "reason": null,
+            "hostOutcome": "ignored",
+            "hostStatus": "cancelled",
+            "playCalls": 1,
+            "src": "/dsh-pet-7340/thumb/duck/idle1.webm",
+            "playbackField": "pb-mvtd5i4o-1"
+          }
+        },
+        {
+          "seq": 11,
+          "tMs": 7.266128,
+          "event": "after-play-microtasks",
+          "detail": {
+            "playCalls": 1,
+            "playbackField": "pb-mvtd5i4o-1"
+          }
+        },
+        {
+          "seq": 12,
+          "tMs": 7.278506,
+          "event": "report",
+          "detail": {
+            "id": "pb-mvtd5i4o-1",
+            "status": "ended",
+            "reason": null,
+            "hostOutcome": "ignored",
+            "hostStatus": "cancelled",
+            "playCalls": 1,
+            "src": "/dsh-pet-7340/thumb/duck/idle1.webm",
+            "playbackField": null
+          }
+        },
+        {
+          "seq": 13,
+          "tMs": 7.279396,
+          "event": "after-handle-ended",
+          "detail": {
+            "playbackField": null
+          }
+        }
+      ],
+      "reports": [
+        {
+          "id": "pb-mvtd5i4o-2",
+          "status": "playing",
+          "hostOutcome": "ok"
+        },
+        {
+          "id": "pb-mvtd5i4o-2",
+          "status": "cancelled",
+          "reason": "superseded",
+          "hostOutcome": "ok"
+        },
+        {
+          "id": "pb-mvtd5i4o-1",
+          "status": "playing",
+          "hostOutcome": "ignored"
+        },
+        {
+          "id": "pb-mvtd5i4o-1",
+          "status": "ended",
+          "hostOutcome": "ignored"
+        }
+      ],
+      "terminalWait": {
+        "playbackId": "pb-mvtd5i4o-2",
+        "status": "cancelled",
+        "reason": "superseded",
+        "matched": false
+      },
+      "records": {
+        "first": {
+          "playbackId": "pb-mvtd5i4o-1",
+          "status": "cancelled",
+          "reason": "superseded"
+        },
+        "second": {
+          "playbackId": "pb-mvtd5i4o-2",
+          "status": "cancelled",
+          "reason": "superseded"
+        }
+      }
+    },
+    "desktopFailure": {
+      "release": "failure",
+      "withHost": true,
+      "marks": [
+        {
+          "seq": 1,
+          "tMs": 8.563867,
+          "event": "host-create",
+          "detail": {
+            "id": "pb-mvtd5i4p-1",
+            "status": "accepted"
+          }
+        },
+        {
+          "seq": 2,
+          "tMs": 8.566483,
+          "event": "switch-first",
+          "detail": {
+            "id": "pb-mvtd5i4p-1"
+          }
+        },
+        {
+          "seq": 3,
+          "tMs": 8.602883,
+          "event": "after-first-switch",
+          "detail": {
+            "src": "/dsh-pet-7340/thumb/duck/idle1.webm",
+            "playCalls": 0,
+            "loadCalls": 1,
+            "pending": "idle1"
+          }
+        },
+        {
+          "seq": 4,
+          "tMs": 8.618165,
+          "event": "host-create-second",
+          "detail": {
+            "id": "pb-mvtd5i4p-2",
+            "first": {
+              "playbackId": "pb-mvtd5i4p-1",
+              "status": "cancelled",
+              "reason": "superseded"
+            },
+            "second": {
+              "playbackId": "pb-mvtd5i4p-2",
+              "status": "accepted",
+              "reason": null
+            }
+          }
+        },
+        {
+          "seq": 5,
+          "tMs": 8.618742,
+          "event": "switch-second",
+          "detail": {
+            "id": "pb-mvtd5i4p-2"
+          }
+        },
+        {
+          "seq": 6,
+          "tMs": 8.629246,
+          "event": "report",
+          "detail": {
+            "id": "pb-mvtd5i4p-2",
+            "status": "playing",
+            "reason": null,
+            "hostOutcome": "ok",
+            "hostStatus": "playing",
+            "playCalls": 0,
+            "src": "/dsh-pet-7340/thumb/duck/idle1.webm",
+            "playbackField": "pb-mvtd5i4p-2"
+          }
+        },
+        {
+          "seq": 7,
+          "tMs": 8.630836,
+          "event": "after-second-switch",
+          "detail": {
+            "src": "/dsh-pet-7340/thumb/duck/idle1.webm",
+            "playCalls": 0,
+            "loadCalls": 1,
+            "playbackField": "pb-mvtd5i4p-2"
+          }
+        },
+        {
+          "seq": 8,
+          "tMs": 8.677249,
+          "event": "report",
+          "detail": {
+            "id": "pb-mvtd5i4p-1",
+            "status": "failed",
+            "reason": "decode-error",
+            "hostOutcome": "ignored",
+            "hostStatus": "cancelled",
+            "playCalls": 0,
+            "src": "/dsh-pet-7340/thumb/duck/idle1.webm",
+            "playbackField": "pb-mvtd5i4p-2"
+          }
+        },
+        {
+          "seq": 9,
+          "tMs": 8.678611,
+          "event": "video-error-returned",
+          "detail": {
+            "playCalls": 0,
+            "playbackField": "pb-mvtd5i4p-2"
+          }
+        }
+      ],
+      "reports": [
+        {
+          "id": "pb-mvtd5i4p-2",
+          "status": "playing",
+          "hostOutcome": "ok"
+        },
+        {
+          "id": "pb-mvtd5i4p-1",
+          "status": "failed",
+          "reason": "decode-error",
+          "hostOutcome": "ignored"
+        }
+      ],
+      "terminalWait": {
+        "playbackId": "pb-mvtd5i4p-2",
+        "status": "playing",
+        "reason": null,
+        "matched": false
+      },
+      "records": {
+        "first": {
+          "playbackId": "pb-mvtd5i4p-1",
+          "status": "cancelled",
+          "reason": "superseded"
+        },
+        "second": {
+          "playbackId": "pb-mvtd5i4p-2",
+          "status": "playing",
+          "reason": null
+        }
+      }
+    }
+  },
+  "stateDelivery": {
+    "collapsed": {
+      "changeCount": 1,
+      "changes": [
+        {
+          "path": "pets.pet-1.anim",
+          "cue": {
+            "name": "idle1",
+            "playbackId": "pb-2"
+          }
+        }
+      ]
+    },
+    "interleaved": {
+      "firstWave": [
+        {
+          "path": "pets.pet-1.anim",
+          "cue": {
+            "name": "idle1",
+            "playbackId": "pb-1"
+          }
+        }
+      ],
+      "secondWave": [
+        {
+          "path": "pets.pet-1.anim",
+          "cue": {
+            "name": "idle1",
+            "playbackId": "pb-2"
+          }
+        }
+      ]
+    }
+  },
+  "realPath": {
+    "reproduced": false,
+    "display": ":1",
+    "wayland": null,
+    "dsh": null,
+    "mockHasAnim": false,
+    "blockers": [
+      "PATH 上没有 dsh，无法把插件装进 DeepSeek Harness 再发 POST /anim",
+      "scripts/dev/mock-server.mjs 没有 POST /anim 与 /playback 上报，启动它不能走点播链路",
+      "node_modules 不存在，Electron 与插件依赖未安装；未启动桌面 Helper",
+      "没有浏览器页面，也没有真实 HTMLVideoElement；play() 兑现不等于屏幕像素，本探针也不观察像素"
+    ]
+  },
+  "contract": {
+    "openApiPlayingMeans": "play() 兑现，不是设了 src，也不是屏幕像素",
+    "existingTestExpectsPrematurePlaying": true,
+    "existingTestFile": "src/client/pet/animation/animation.test.ts:182-190",
+    "firstPrematureReport": {
+      "id": "pb-2",
+      "status": "playing"
+    },
+    "claimRuntimeVulnerability": false
+  }
+}
