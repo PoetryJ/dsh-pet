@@ -6,7 +6,9 @@
 import { createMediaAdapter, systemMediaClock } from '../adapters/media/adapter.ts';
 import { createElementLoader } from '../adapters/media/element-loader.ts';
 import type { MediaElement } from '../adapters/media/types.ts';
+import { domScreenPointToDip } from '../adapters/window/pointer-point.ts';
 import './bridge.ts';
+import { previewDataset } from './preview-gate.ts';
 import { createPetController, parseClipRequest, type PetController } from './wire.ts';
 
 const DRAG_THRESHOLD_PX = 5;
@@ -27,6 +29,12 @@ video.muted = true;
 video.playsInline = true;
 video.autoplay = false;
 
+const previewMark = previewDataset(location.search);
+if (previewMark !== null) {
+  document.documentElement.dataset.previewRequested = previewMark.previewRequested;
+  document.documentElement.dataset.previewActive = previewMark.previewActive;
+}
+
 const showClip = (): void => {
   placeholder.hidden = true;
   video.hidden = false;
@@ -39,6 +47,7 @@ const showPlaceholder = (): void => {
 
 const holder: { controller?: PetController } = {};
 
+// 已验收的单槽适配器。预览标记只记录请求，本轮不按它更换实现。
 const media = createMediaAdapter({
   element: bindVideo(video),
   loader: createElementLoader(video),
@@ -98,15 +107,18 @@ petEl.addEventListener('pointerdown', (ev) => {
   } catch {
     // 合成指针没有底层捕获时仍按坐标判定。
   }
-  controller.pointer({ type: 'pointerdown', pointerId: ev.pointerId, x: ev.screenX, y: ev.screenY });
+  const dip = domScreenPointToDip({ x: ev.screenX, y: ev.screenY });
+  controller.pointer({ type: 'pointerdown', pointerId: ev.pointerId, x: dip.x, y: dip.y });
 });
 
 petEl.addEventListener('pointermove', (ev) => {
-  controller.pointer({ type: 'pointermove', pointerId: ev.pointerId, x: ev.screenX, y: ev.screenY });
+  const dip = domScreenPointToDip({ x: ev.screenX, y: ev.screenY });
+  controller.pointer({ type: 'pointermove', pointerId: ev.pointerId, x: dip.x, y: dip.y });
 });
 
 petEl.addEventListener('pointerup', (ev) => {
-  controller.pointer({ type: 'pointerup', pointerId: ev.pointerId, x: ev.screenX, y: ev.screenY });
+  const dip = domScreenPointToDip({ x: ev.screenX, y: ev.screenY });
+  controller.pointer({ type: 'pointerup', pointerId: ev.pointerId, x: dip.x, y: dip.y });
 });
 
 petEl.addEventListener('pointercancel', (ev) => {

@@ -14,9 +14,16 @@
     "start": "pnpm build && node scripts/start.mjs",
     "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.preload.json --noEmit",
     "lint": "eslint .",
-    "test": "node --experimental-strip-types --test --test-reporter spec core/playback/*.test.ts core/interaction/*.test.ts adapters/media/*.test.ts adapters/window/*.test.ts app/*.test.ts tests/boundaries.test.ts",
-    "test:e2e": "node --experimental-strip-types --test --test-reporter spec tests/electron.e2e.test.ts",
-    "verify": "pnpm typecheck && pnpm lint && pnpm test && pnpm build && pnpm test:e2e"
+    "test": "node scripts/unit-tests.mjs",
+    "test:cleanup": "node --experimental-strip-types --test --test-reporter spec tests/cleanup.test.ts tests/support/process-tree.test.ts tests/support/process-table.test.ts tests/support/run-record.test.ts tests/support/record-cli.test.ts",
+    "test:e2e": "node --experimental-strip-types --test --test-concurrency=1 --test-reporter spec tests/*.e2e.test.ts",
+    "record:platform": "node scripts/record-platform-run.mjs",
+    "verify": "pnpm typecheck && pnpm lint && pnpm test && pnpm build && pnpm test:e2e",
+    "verify:windows": "powershell -File scripts/verify-windows.ps1",
+    "assets:check": "node --experimental-strip-types assets-pipeline/cli.ts",
+    "experiment:arbiter": "node --experimental-strip-types experiments/arbiter/runner/main.ts",
+    "experiment:arbiter:check": "node --experimental-strip-types experiments/arbiter/check/main.ts",
+    "experiment:arbiter:demo": "node --experimental-strip-types experiments/arbiter/demo/main.ts"
   },
   "pnpm": {
     "onlyBuiltDependencies": ["electron"]

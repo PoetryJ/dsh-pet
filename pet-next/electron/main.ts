@@ -8,6 +8,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createWindowController } from '../adapters/window/controller.ts';
 import type { WindowBounds, WorkArea } from '../adapters/window/types.ts';
+import { PREVIEW_ENV, PREVIEW_QUERY } from '../contracts/preview.ts';
+import { logReady } from './ready-report.ts';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const WINDOW_WIDTH = 320;
@@ -63,7 +65,12 @@ function createWindow(): void {
     setPosition(x, y) {
       win.setPosition(x, y);
       if (process.env.PET_NEXT_TEST === '1') {
-        console.log(JSON.stringify({ event: 'bounds', bounds: win.getBounds() }));
+        console.log(JSON.stringify({
+          event: 'bounds',
+          bounds: win.getBounds(),
+          requested: { x, y },
+          physical: screen.dipToScreenPoint({ x, y }),
+        }));
       }
     },
     workAreaFor,
@@ -98,23 +105,14 @@ function createWindow(): void {
 
   win.once('ready-to-show', () => {
     win.show();
-    const bounds = win.getBounds();
-    console.log(
-      JSON.stringify({
-        event: 'ready',
-        alwaysOnTop: win.isAlwaysOnTop(),
-        transparent: windowOptions.transparent,
-        requestedBackground: windowOptions.backgroundColor,
-        background: win.getBackgroundColor(),
-        bounds,
-        workArea: workAreaFor(bounds),
-      }),
-    );
+    logReady(win, windowOptions.backgroundColor, windowOptions.transparent, workAreaFor(win.getBounds()));
   });
 
   const query: Record<string, string> = {};
   if (process.env.PET_NEXT_IDLE_URL) query.idle = process.env.PET_NEXT_IDLE_URL;
   if (process.env.PET_NEXT_REACTION_URL) query.reaction = process.env.PET_NEXT_REACTION_URL;
+  const preview = process.env[PREVIEW_ENV];
+  if (preview !== undefined && preview !== '') query[PREVIEW_QUERY] = preview;
   void win.loadFile(path.join(root, 'app/page.html'), { query });
 }
 
