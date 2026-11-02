@@ -1,0 +1,219 @@
+M3-0 聊天 E2E 验收原始记录（agent D）
+================================================
+工作区：/data3/DATA/project/project_meishijiang/dsh-pet-wt/m3d-e2e/pet-next（分支 m3d-e2e，基线 8224143）
+DISPLAY 约定：本 E2E 独占 :94（PET_NEXT_E2E_DISPLAY 可覆盖）；:99/:95 归集成负责人与 C。
+环境：node v24.14.0（/root/.workbuddy/binaries/node/versions/24.14.0/bin），Xvfb/xdotool 系统自带。
+
+一、交付物
+------------------------------------------------
+- tests/support/chat-fake-server.ts   可编程 fake HTTP（延迟/错误/慢回复/{id,text} 与连接事件记录）
+- tests/chat.e2e.test.ts              5 个场景（真实 Electron，Xvfb :94 + CDP 驱动）
+- tests/chat-evidence/                本目录全部验收记录文本（含 fake-server-smoke.txt）
+
+二、fake server 协议（已同步全队）
+------------------------------------------------
+POST {base}/（或任意非 /__* 路径）body {"id","text"}
+  ok 模式:   200 {"id":<同请求>,"text":"演示回复：已收到「<原文>」"}
+  error 模式: 可编程状态码（默认 500）{"id":...,"error":"fake-server-error"}
+GET /__health | POST /__config {"mode","status","delayMs"} | POST /__reset | GET /__state
+行为要点：
+- 每请求的行为参数在收到时快照，之后的 /__config 不影响在途请求；
+- 客户端断开不中断处理：延迟到期仍产出响应（respondedAt 晚于 closedAt 可证），送达失败如实记录；
+  E2E 借此证明"旧请求迟到响应即使产出也不得上屏"。
+
+三、面板定位契约（对齐 m3c-panel@2f0d6cb 实测）
+------------------------------------------------
+C 的面板未加 data-testid，但 class 命名与我的 testid 清单同名。E2E 选择器已实现
+「data-testid 优先、class 兜底」，因此两边都能定位；C 若后续补 data-testid 无需改 E2E：
+  chat-panel→.chat-panel-root（data-state: closed/open/typing/pending/reply/error/cancelled）
+  chat-toggle→.chat-toggle（面板初始收起，E2E 先点它打开）
+  chat-input→.chat-input(textarea)  chat-send→.chat-send  chat-cancel→.chat-cancel(在途才可用)
+  chat-close→.chat-close（收起面板=撤销在途请求）
+  chat-msg-user→.chat-entry-user  chat-msg-assistant→.chat-entry-bot(含 .chat-demo-tag“演示回复”标注)
+  chat-msg-error→.chat-entry-error（“发送失败（code）”）
+  chat-status→.chat-entry-status（“发送中…”/“已取消”）
+面板内还内置 .chat-note：“以下回复均为演示回复（预览假数据），非真实模型输出。”
+
+四、已完成记录（接线合入前）
+------------------------------------------------
+[1] 2026-11-02T17:05+08:00  静态检查（新增两文件）
+    cmd: ./node_modules/.bin/tsc -p tsconfig.json --noEmit ; ./node_modules/.bin/eslint \
+         tests/chat.e2e.test.ts tests/support/chat-fake-server.ts
+    结果：新增文件 0 错误；eslint 退出码 0。
+    注意：基线 8224143 自带 core/chat/session.ts(25) TS2304（缺 import ChatErrorCode，归 A），
+    使全仓 tsc 退出码=2；该错误非本任务引入（git status core/ 干净），已上报 team-lead。
+    摘录（过滤 core 后无任何输出，即新增文件无报错）：
+      > ./node_modules/.bin/tsc -p tsconfig.json --noEmit 2>&1 | grep -v 'core/chat/session.ts'
+      > （空）
+      > ./node_modules/.bin/eslint tests/chat.e2e.test.ts tests/support/chat-fake-server.ts
+      > ESLINT_EXIT=0
+
+[2] 2026-11-02T17:07:42+08:00  fake server 独立冒烟（原始输出全文见 fake-server-smoke.txt）
+    cmd: node --experimental-strip-types tests/support/chat-fake-server.ts --port=8901
+         node --experimental-strip-types tests/support/chat-fake-server.ts --port=8902 --delay=2000
+         （curl 依次打 /__health、POST 聊天、/__config error、POST 聊天、--max-time 0.5 中断慢回复、
+          /__state、SIGTERM 停服）
+    结果：全部符合预期；临时进程已 SIGTERM 清理（停服完成）。
+    关键摘录：
+      {"ok":true,"mode":"ok","status":500,"delayMs":0}                      ← 健康检查
+      {"id":"chat-smoke-1","text":"演示回复：已收到「冒烟第一句」"}           ← ok 回复
+      {"id":"chat-smoke-2","error":"fake-server-error"} + HTTP 500            ← 错误模式
+      8902 abort 用例 state 摘录：
+      {"id":"chat-abort-1",...,"clientClosed":true,"closedAt":1793610463755,
+       "respondedAt":1793610465257,"responseText":"演示回复：已收到「会断开」","deliverError":null}
+      ← 客户端 0.5s 断开后，服务端仍在 2s 到点产出迟到响应（respondedAt>closedAt），送达被内核丢弃
+    观察：Node 对已断开 socket 的 write 静默丢弃（deliverError 可能为 null），
+    因此"取消/关窗"的可信观测信号是 clientClosed；迟到响应的产出证明是 respondedAt>closedAt。
+
+[3] E2E 用例清单（tests/chat.e2e.test.ts，接线合入后执行并回填）
+    T1 打开面板→输入→发送→fake 回复显示（含"演示回复"标注与原文回显）＋请求 id 形状断言
+    T2 fake 500→面板报错→恢复后再发成功
+    T3 取消慢回复→显示已取消→立即再发成功；旧迟到回复不显示（核心断言：
+       fake 侧等旧 id respondedAt 产出后 +1s，断言面板无该回复）
+    T4 在途时关面板（若有 chat-close）/关窗→fake 观察连接断开→退出码 0、无残留进程
+    T5 回归门：未设 PET_NEXT_CHAT_PREVIEW 不挂面板，pet 仍可正常退出
+    回归（另行执行）：tests/demo-entry.e2e.test.ts 全量
+    运行命令：
+      export PATH=/root/.workbuddy/binaries/node/versions/24.14.0/bin:/opt/conda/envs/siren3/bin:$PATH
+      pnpm build
+      node --experimental-strip-types --test --test-reporter spec tests/chat.e2e.test.ts | \
+        tee tests/chat-evidence/chat-e2e-run.txt
+      node --experimental-strip-types --test --test-reporter spec tests/demo-entry.e2e.test.ts | \
+        tee tests/chat-evidence/demo-entry-regression.txt
+
+五、接线合入后的运行记录（负责人回填，2026-11-02T18:40+08:00）
+------------------------------------------------
+[4] 集成分支 codex/pet-next-m3-chat 实跑（HEAD 16a84e4，DISPLAY=:99，负责人执行）
+    cmd: pnpm build
+         DISPLAY=:99 node --experimental-strip-types --test --test-concurrency=1 --test-reporter spec tests/chat.e2e.test.ts
+    结果：5/5 全过（exit 0），单次 ~9s：
+      ✔ T1 打开面板→输入→发送→fake 回复显示（含演示回复标注） (718ms)
+      ✔ T2 fake 返回 500→面板报错→恢复后再发成功 (654ms)
+      ✔ T3 取消慢回复→显示已取消→立即再发成功且旧迟到回复不显示（核心断言） (4636ms)
+      ✔ T4 在途时关面板/关窗→fake 观察连接断开，Electron 退出无残留 (717ms)
+      ✔ T5 回归门：未设 PET_NEXT_CHAT_PREVIEW 时不挂聊天面板，pet 仍可退出 (495ms)
+
+[5] 完整 pnpm verify（HEAD 16a84e4，DISPLAY=:99）
+    cmd: DISPLAY=:99 pnpm verify   退出码 0（完整日志：logs/chat-evidence/verify-full.log，不提交）
+    各层：unit 269/269、cleanup 20/20、integration 5/5、e2e 16/16（聊天 5 + 既有 11 回归）、
+          typecheck 0、lint 0、build 成功。
+
+[6] 手工演示（真实 Electron + 本地 fake HTTP，CDP 驱动 + 截图，基线 HEAD 16a84e4）
+    cmd: node /tmp/chat-demo-manual.mjs（编排等价于 pnpm chat:preview，另加 remote-debugging-port 供脚本驱动）
+    状态链（logs/chat-evidence/demo/demo-log.ndjson）：
+      closed → open → 输入"你好，今天吃点什么？" → reply（bots: "演示回复【演示回复】已收到：你好，今天吃点什么？"）
+      → [slow] 发送 → pending（status=发送中…）→ 点取消 → cancelled（status=已取消，bots 未新增）
+    截图：1-closed / 2-open / 3-reply / 4-pending / 5-cancelled.png（同目录）
+    收尾：electron/fake 均 SIGTERM，进程无残留；演示总结 offline_ready=true。
+
+[7] 接线期发现并修复的 3 处集成缺陷（负责人）
+    a) C 面板无 data-testid，而 E2E typeAndSend 只认 testid → 面板补 data-testid（class 保留）；
+    b) 根因：preload 的 cancel 发送字符串 id，主进程 payloadId 只解对象 → 取消被静默丢弃，
+       表现为"取消未撤销 fake 侧连接"。两端对齐（preload 发 {id}，payloadId 兼容 string）。
+       这是 T3/T4 首轮 4 失败中 2 个的唯一根因；
+    c) copy-static 未打包 chat-panel.css → 面板在 dist 无样式；单元收集器未含 electron/ →
+       chat-service.test.ts 不被 verify 收集。均已修。
+
+六、未证明项
+------------------------------------------------
+- 未接真实模型：fake 服务健康检查口径仅报 offline_ready（本地假服务就绪、真实模型链路未接），
+  本 E2E 证明的是"面板↔主进程↔Provider HTTP 链路"的端到端行为，不含真实模型质量。
+- 真实模型的首回复延迟、成本、内容质量未测：地址/协议/凭据未指定，按任务要求不猜、不接。
+- 双击/高 DPI 下的面板视觉无专业设计评审；仅保证功能与不干扰宠物拖动/点击（回归门通过）。
+
+七、正式入口 E2E（M3-0 收尾；tests/chat.e2e.test.ts 重写）
+================================================
+[8] 变更要点（相对四、五章的直连 Electron 版本）
+    - 唯一启动链：`pnpm chat:preview`（= pnpm build && node scripts/chat-demo.mjs），不再自己
+      spawn electron / 不再自带 fake；入口负责起 fake HTTP + Electron 并按冻结参数接线。
+    - 交互改真实输入事件：CDP Input.dispatchMouseEvent（坐标=控件矩形中心）、
+      Input.insertText 输入、Input.dispatchKeyEvent（Backspace/End/Enter）；DOM 只读（矩形/状态/文本），
+      不用 el.click()、不直接赋 value。
+    - 每次点击前断言控件矩形在视口 0..宽高内且中心点可命中（elementFromPoint）；
+      覆盖 toggle / 标题 / 关闭 / 输入 / 发送 / 取消 六个控件。
+    - 旧 T5（未开预览不挂面板）不再适用于正式入口（入口恒开预览），已从本文件移除；
+      该行为仍由 app/preview-gate.test.ts 等单测与既有 e2e 覆盖，本章不再重复声明。
+    - tests/support/chat-fake-server.ts 保留但不再被引用（入口自带 adapters/chat/fake-server.ts）。
+
+    集成来源（均已合入 m3d-e2e）：m3a-core ba5acad（chat-demo-core 入口）、
+    m3b-service 3ea2d48（chat-service 在途 id 归属）、m3c-panel 575c910（面板视口约束）。
+
+[9] 实跑（2026-11-02T19:53+08:00，分支 m3d-e2e，DISPLAY=:94）
+    cmd:
+      export PATH=/root/.workbuddy/binaries/node/versions/24.14.0/bin:/opt/conda/envs/siren3/bin:$PATH
+      node --experimental-strip-types --test --test-concurrency=1 --test-reporter spec tests/chat.e2e.test.ts
+    退出码 0，4/4 通过，总耗时 60.7s（每条独立跑一次 pnpm chat:preview，含 build ~13s）：
+      ✔ T1 打开面板→输入→发送→演示回复→关面板→关窗                     13976ms
+      ✔ T2 [error] 报错→恢复后再发成功                                   14221ms
+      ✔ T3 [slow] 取消→立即重发→旧迟到回复不显示→关面板→在途关窗         18784ms
+      ✔ T4 fake 端口被占用→入口非零退出、无 Electron 残留                13559ms
+    每例实际启动参数（原始记录见各 txt 的 cmd/env 行）：
+      DISPLAY=:94 PET_NEXT_CHAT_DEBUG_PORT=<随机> PET_NEXT_USER_DATA=/tmp/pet-next-formal-e2e-<随机>
+      PET_NEXT_TEST=1 PET_NEXT_FAKE_CHAT_DELAY_MS=0 PET_NEXT_FAKE_CHAT_SLOW_MS=3000
+    入口自报的 electron 参数（入口 stdout 的 chat-demo-electron-config 记录，可核对冻结参数生效）：
+      {"event":"chat-demo-electron-config","debugPort":46473,
+       "electronArgs":["--no-sandbox","--disable-dev-shm-usage","--remote-debugging-port=46473",
+                       ".../dist/electron/main.js"],"userData":"/tmp/pet-next-formal-e2e-..."}
+
+[10] 关键证据摘录（全文见 tests/chat-evidence/formal-entry/）
+    T1（t1-open-send-reply.txt + t1-0*.png）
+      面板矩形（视口 320x240，全部在视口内）：
+        toggle x=278 y=66 34x34 / title x=57 y=108 43.2x14 / close x=286.8 y=107 16.2x16
+        input x=57 y=168 246x34 / send x=233.5 y=206 30.8x20 / cancel x=272.2 y=206 30.8x20
+      mouse click chat-input @ (180,185) → keyboard input: 你好桌面宠物
+      reply: phase=reply demoTagCount=1 assistantMsgs=["演示回复【演示回复】已收到：你好桌面宠物"]
+      mouse click chat-close @ (295,57) → closed: phase=closed hidden=true
+      entry exit: code=0 → 残留进程（本次进程树）: [] / （--remote-debugging-port=46473）: []
+    T2（t2-error-recovery.txt + t2-0*.png）
+      error: phase=error errorMsgs=["发送失败（provider-error）"]（cancel 已禁用、无“发送中…”）
+      recovered: phase=reply assistantMsgs=["演示回复【演示回复】已收到：恢复后的这句"]
+      entry exit: code=0；残留进程 []
+    T3（t3-cancel-resend.txt + t3-0*.png，核心）
+      pending: phase=pending status=["发送中…"]
+      tcp open at +97ms：Electron 主进程(pid) → fake 端口 ESTABLISHED（inode/localPort 记录在案）
+      mouse click chat-cancel @ (288,216) → cancelled: phase=cancelled status=["已取消"] at +134ms
+      tcp closed at +44ms after cancel（距发送 +178ms）：同一 pid 到 fake 端口的 ESTAB 消失
+        = signal 真的传导到 fetch abort（不是只在 UI 上改状态）
+      keyboard: 第二句立刻回 + Enter(rawKeyDown/keyUp) → resend reply at +281ms
+      after slow deadline (+4502ms)：assistantMsgs 只有「第二句立刻回」，旧「慢速第一句」未上屏
+      关面板（鼠标 chat-close）→ 重开 → 在途再发 → window.pet.quit() 关窗：
+        entry exit: code=0；tcp open before quit 记录在案；残留进程 []（进程树 + 调试端口两路核对）
+    T4（t4-entry-failure.txt）
+      先占用端口再 PET_NEXT_FAKE_CHAT_PORT=<occupied> → fake EADDRINUSE → 
+        {"event":"chat-demo-failed","reason":"fake-exit","exit":1} → pnpm 退出码 1
+      调试端口未监听、无 --remote-debugging-port=<port> 游离进程、本次进程树存活 pid []
+      占用端口仍归用例所有（fake 未换端口重试/未抢占）
+
+[11] 观测口子与取舍（需要 A 知道的事实）
+    - 入口 fake（adapters/chat/fake-server.ts）没有 /__state，也没有实现我申请的
+      PET_NEXT_CHAT_FAKE_OBSERVABILITY，因此"respondedAt > closedAt"无法直接读；
+      改为等价更强的信号：/proc/<electronPid>/fd 的 socket inode ↔ /proc/net/tcp 的 ESTABLISHED 行，
+      取消前有连接、取消后 44ms 内消失（同一 inode/端口），证明 abort 真的落地。
+    - 入口 fake 在客户端断开后不再回写（clientGone 直接 return），所以"旧迟到回复不显示"
+      是面板侧断言（等到 slow 到期点 +1.5s 再读 DOM）；若将来 fake 支持观测文件，
+      本用例会自动追加 chat-request-closed / chat-responded 记录断言（已实现，未触发）。
+    - Node 的 WebSocket 不带 Origin，CDP 不需要 --remote-allow-origins；A 的入口当前参数已够用。
+
+[12] 本章未证明项
+    - 真实模型链路仍未接（fake 恒 offline_ready 口径），与六章一致。
+    - 关窗用的是页面提供的 window.pet.quit()（与 Escape/托盘退出同一路径），
+      没有模拟操作系统窗口管理器的关闭按钮（Xvfb 无 WM）。
+    - "旧迟到回复"只用 DOM 证明未上屏 + socket 证明请求已撤销；没有 fake 侧 respondedAt 记录
+      （见 [11]），故不宣称"迟到响应已产出但被丢弃"。
+    - 面板视觉/可读性无设计评审；本章只证明 320x240 视口内六控件可点、不越界。
+
+[13] 负责人独立复现（2026-11-02T19:56+08:00，集成分支 HEAD=合并后，DISPLAY=:99）
+------------------------------------------------
+    正式入口：pnpm chat:preview（带 PET_NEXT_CHAT_DEBUG_PORT=9224、PET_NEXT_USER_DATA=临时目录、PET_NEXT_TEST=1）
+    驱动：CDP Input.dispatchMouseEvent 真实点击 + Input.insertText 真实文本输入；DOM 只读状态/矩形
+    折叠/打开矩形（320x240 视口）：
+      toggle (278,198,34,34) inViewport=true
+      打开后 root(48,66,264,166) panel(48,104,264,128) title(57,108,43,14)
+      close(287,107,16,16) input(57,168,246,34) send(233,206,31,20) cancel(272,206,31,20)
+      viewport-checks: root/panel/title/close/input/send/cancel 全 true
+    路径：open → 输入"你好，今天吃点什么？" → 回复（bots 1 条）→ [slow] 发送 → pending（发送中…）
+      → 点取消 → cancelled（已取消，bots 未新增）→ 立即重发 → 新回复（bots 2 条）
+    关窗：CDP Browser.close → pnpm chat:preview 退出码 0；残留进程 0（pgrep electron/fake 均空）
+    证据：logs/chat-evidence/closeout-demo/{1-open,2-reply,3-cancelled,4-resend}.png、
+          demo-stdout.ndjson（本次 stdout 全文，含全部 state/rects 记录）
+    说明：修复前面板在 320x240 下 root 会超出视口（标题被裁）；修复后所有控件矩形在 0..320 x 0..240 内。
