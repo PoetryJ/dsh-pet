@@ -185,7 +185,15 @@ describe('integration contracts', () => {
     assert.equal(behavior.includes('createDesktopPetBehavior'), true);
     const scripts = JSON.parse(await readFile(path.join(petRoot, 'package.json'), 'utf8')) as { scripts: Record<string, string> };
     assert.equal(scripts.scripts.start, 'pnpm build && node scripts/start.mjs');
-    assert.equal(scripts.scripts.verify, 'pnpm typecheck && pnpm lint && pnpm test && pnpm build && pnpm test:e2e');
+    assert.equal(
+      scripts.scripts.verify,
+      'node scripts/preflight.mjs --require=unit,integration,cleanup,e2e && pnpm typecheck && pnpm lint && pnpm test && pnpm test:cleanup && pnpm test:integration && pnpm build && pnpm test:e2e',
+    );
+    assert.equal(scripts.scripts.preflight, 'node scripts/preflight.mjs');
+    assert.equal(
+      scripts.scripts['test:integration'],
+      'node --experimental-strip-types --test --test-reporter spec tests/assets/pipeline.test.ts && pnpm assets:check',
+    );
     assert.equal(scripts.scripts.test, 'node scripts/unit-tests.mjs');
     const unitTests = await readFile(path.join(petRoot, 'scripts/unit-tests.mjs'), 'utf8');
     for (const rel of ['core', 'adapters', 'app', 'tests', 'experiments', 'bench']) {
